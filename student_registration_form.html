@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Registration Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0f1e3c;
+      --gold: #c9a84c;
+      --gold-light: #f0d98a;
+      --cream: #faf7f0;
+      --white: #ffffff;
+      --border: #d6cbb5;
+      --text: #2a2a2a;
+      --muted: #7a7060;
+      --error: #c0392b;
+      --radius: 8px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(201,168,76,0.08) 0%, transparent 60%);
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 680px;
+    }
+
+    /* Logo above form title */
+    .logo-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 28px;
+      animation: fadeDown 0.6s ease both;
+    }
+
+    .logo-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 24px rgba(201,168,76,0.35);
+      margin-bottom: 12px;
+    }
+
+    .logo-circle svg {
+      width: 38px;
+      height: 38px;
+    }
+
+    .school-name {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold-light);
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* Card */
+    .form-card {
+      background: var(--cream);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.45);
+      animation: fadeUp 0.7s ease 0.15s both;
+    }
+
+    /* Form title */
+    .form-header {
+      background: var(--navy);
+      padding: 28px 40px;
+      text-align: center;
+      border-bottom: 3px solid var(--gold);
+      position: relative;
+    }
+
+    .form-header h1 {
+      font-family: 'Playfair Display', serif;
+      color: var(--white);
+      font-size: 1.85rem;
+      letter-spacing: 0.03em;
+    }
+
+    .form-header p {
+      color: var(--gold-light);
+      font-size: 0.82rem;
+      margin-top: 6px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    .header-line {
+      width: 48px;
+      height: 3px;
+      background: var(--gold);
+      margin: 12px auto 0;
+      border-radius: 2px;
+    }
+
+    /* Form body */
+    .form-body {
+      padding: 36px 40px;
+    }
+
+    /* Separator / breaker between sections */
+    .section-break {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 28px 0 22px;
+    }
+
+    .section-break hr {
+      flex: 1;
+      border: none;
+      border-top: 1.5px solid var(--border);
+    }
+
+    .section-break span {
+      font-family: 'Playfair Display', serif;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      white-space: nowrap;
+    }
+
+    /* Field groups */
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 18px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--navy);
+      margin-bottom: 6px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    label .req { color: var(--gold); margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      color: var(--text);
+      background: var(--white);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.18);
+    }
+
+    /* Custom select arrow */
+    .select-wrap {
+      position: relative;
+    }
+
+    .select-wrap::after {
+      content: '▾';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+      font-size: 1rem;
+    }
+
+    /* Gender radio group */
+    .radio-group {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .radio-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--text);
+      padding: 9px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      transition: all 0.2s;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 400;
+    }
+
+    .radio-label:hover { border-color: var(--gold); }
+
+    .radio-label input[type="radio"] { accent-color: var(--gold); width: 16px; height: 16px; }
+
+    /* Hobbies checkboxes */
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      color: var(--text);
+      padding: 7px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      background: var(--white);
+      transition: all 0.2s;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 400;
+    }
+
+    .checkbox-label:hover { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+    .checkbox-label input[type="checkbox"] { accent-color: var(--gold); width: 15px; height: 15px; }
+
+    /* Buttons */
+    .btn-row {
+      display: flex;
+      gap: 14px;
+      margin-top: 32px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 13px 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 500;
+      border-radius: var(--radius);
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: all 0.22s;
+      border: 2px solid transparent;
+    }
+
+    .btn-reset {
+      background: var(--white);
+      color: var(--navy);
+      border-color: var(--border);
+    }
+
+    .btn-reset:hover {
+      border-color: var(--navy);
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .btn-submit {
+      background: var(--navy);
+      color: var(--white);
+      border-color: var(--navy);
+    }
+
+    .btn-submit:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--navy);
+    }
+
+    /* Success message */
+    .success-msg {
+      display: none;
+      background: #e8f5e9;
+      border: 1.5px solid #4caf50;
+      color: #2e7d32;
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      font-size: 0.9rem;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    /* Animations */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 560px) {
+      .form-body { padding: 28px 22px; }
+      .form-header { padding: 22px 22px; }
+      .field-row { grid-template-columns: 1fr; }
+      .btn-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- Logo above form title -->
+  <div class="logo-area">
+    <div class="logo-circle">
+      <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="19" cy="13" r="6" fill="#0f1e3c"/>
+        <path d="M5 30c0-7.732 6.268-14 14-14s14 6.268 14 14" stroke="#0f1e3c" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M19 2 L22 10 L30 10 L24 15 L26 23 L19 18 L12 23 L14 15 L8 10 L16 10 Z" fill="#0f1e3c" opacity="0.25"/>
+      </svg>
+    </div>
+    <span class="school-name">Academia Institute</span>
+  </div>
+
+  <div class="form-card">
+
+    <!-- Form Title -->
+    <div class="form-header">
+      <h1>Student Registration</h1>
+      <p>Academic Enrollment Form</p>
+      <div class="header-line"></div>
+    </div>
+
+    <div class="form-body">
+      <form id="regForm" novalidate>
+
+        <!-- Personal Info Section -->
+        <div class="section-break">
+          <hr/><span>Personal Information</span><hr/>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="firstName">First Name <span class="req">*</span></label>
+            <input type="text" id="firstName" name="firstName" placeholder="e.g. Jane" required/>
+          </div>
+          <div class="field">
+            <label for="lastName">Last Name <span class="req">*</span></label>
+            <input type="text" id="lastName" name="lastName" placeholder="e.g. Doe" required/>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="email">Email Address <span class="req">*</span></label>
+          <input type="email" id="email" name="email" placeholder="e.g. jane.doe@email.com" required/>
+        </div>
+
+        <div class="field">
+          <label for="dob">Date of Birth <span class="req">*</span></label>
+          <input type="date" id="dob" name="dob" required/>
+        </div>
+
+        <!-- Separator -->
+        <div class="section-break">
+          <hr/><span>Gender</span><hr/>
+        </div>
+
+        <div class="field">
+          <label>Select Gender <span class="req">*</span></label>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="gender" value="male"/> Male</label>
+            <label class="radio-label"><input type="radio" name="gender" value="female"/> Female</label>
+            <label class="radio-label"><input type="radio" name="gender" value="other"/> Other</label>
+            <label class="radio-label"><input type="radio" name="gender" value="prefer_not"/> Prefer not to say</label>
+          </div>
+        </div>
+
+        <!-- Academic Section -->
+        <div class="section-break">
+          <hr/><span>Academic Details</span><hr/>
+        </div>
+
+        <div class="field">
+          <label for="course">Main Course / Subject <span class="req">*</span></label>
+          <div class="select-wrap">
+            <select id="course" name="course" required>
+              <option value="" disabled selected>Select your course</option>
+              <option value="it">Information Technology (IT)</option>
+              <option value="cs">Computer Science</option>
+              <option value="business_it">Business IT</option>
+              <option value="data_science">Data Science</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Hobbies Section -->
+        <div class="section-break">
+          <hr/><span>Hobbies &amp; Interests</span><hr/>
+        </div>
+
+        <div class="field">
+          <label>Hobbies (select all that apply)</label>
+          <div class="checkbox-group">
+            <label class="checkbox-label"><input type="checkbox" name="hobbies" value="reading"/> Reading</label>
+            <label class="checkbox-label"><input type="checkbox" name="hobbies" value="coding"/> Coding</label>
+            <label class="checkbox-label"><input type="checkbox" name="hobbies" value="gaming"/> Gaming</label>
+            <label class="checkbox-label"><input type="checkbox" name="hobbies" value="music"/> Music</label>
+            <label class="checkbox-label"><input type="checkbox" name="hobbies" value="sports"/> Sports</label>
+            <label class="checkbox-label"><input type="checkbox" name="hobbies" value="art"/> Art &amp; Design</label>
+            <label class="checkbox-label"><input type="checkbox" name="hobbies" value="travel"/> Travel</label>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="btn-row">
+          <button type="reset" class="btn btn-reset">Reset Form</button>
+          <button type="submit" class="btn btn-submit">Submit Registration</button>
+        </div>
+
+        <div class="success-msg" id="successMsg">
+          ✅ Registration submitted successfully! Welcome aboard.
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('regForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Basic validation
+    const required = ['firstName', 'lastName', 'email', 'dob', 'course'];
+    let valid = true;
+
+    required.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) {
+        el.style.borderColor = '#c0392b';
+        valid = false;
+      } else {
+        el.style.borderColor = '';
+      }
+    });
+
+    const gender = document.querySelector('input[name="gender"]:checked');
+    if (!gender) valid = false;
+
+    if (valid) {
+      document.getElementById('successMsg').style.display = 'block';
+      this.reset();
+      setTimeout(() => {
+        document.getElementById('successMsg').style.display = 'none';
+      }, 5000);
+    } else {
+      alert('Please fill in all required fields.');
+    }
+  });
+
+  // Clear red border on input
+  document.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input', () => { el.style.borderColor = ''; });
+  });
+</script>
+</body>
+</html>
